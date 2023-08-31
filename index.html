@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Print multiple document</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <style type="text/css">
+        *{
+            margin:0;
+            padding: 0;
+        }
+        fieldset {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            gap: 1rem;
+            width: fit-content;
+        }
+        /* -------------------------
+        -
+        -    DOC SUR LES BREAK-* (saut de page): https://developer.mozilla.org/en-US/docs/Web/CSS/break-after
+        -   
+        -
+        ---------------------------*/
+        @page {
+            size: a5 portrait;
+            margin: 0;
+        }
+
+        @page toc {
+        /* size: a5 portrait; */
+            @top-middle {
+                content: "Table des matières";
+            }
+        }
+
+        @page foreword {
+        size: a5 landscape;
+            @top-middle {
+                content: "Foreword";
+            }
+        }
+
+        @page introduction {
+        /* size: a5 portrait; */
+            @top-middle {
+                content: "Introduction";
+            }
+        }
+
+        @page conclusion {
+        /* size: a5 portrait; */
+            @top-middle {
+                content: "Conclusion";
+            }
+        }
+
+        @page chapter {
+        /* size: a5 landscape; */
+            @top-middle {
+                content: "Chapter";
+            }
+        }
+
+        @media print {
+        fieldset {
+            display: none;
+        }
+        .chapter {
+            border: tomato 2px solid;
+        }
+        [data-print="paged"] > #toc {
+            page: toc;
+            font-family: Courier;
+        }
+        [data-print="paged"] > #foreword {
+            page: foreword;
+            font-family: Courier;
+        }
+        [data-print="paged"] > #introduction {
+            page: introduction;
+            font-family: Courier;
+        }
+        [data-print="paged"] > #conclusion {
+            page: conclusion;
+            font-family: Courier;
+        }
+        [data-print="paged"] > .chapter {
+            page: chapter;
+        }
+        [data-print="paged"] > .chapter {
+            border: none;
+            break-after: page;
+        }
+        .chapter > ul {
+            columns: 2;
+        }
+        }
+
+
+        /* @page {
+            size: A5 landscape;
+            margin: 2cm;
+        } */
+
+        section {
+            page-break-after: always;
+            break-after: page;
+            background-color: #b0e1f4;
+        }
+
+        @media print {
+            button {
+                display: none;
+            }
+        }
+        @page :first {
+            /* ? */
+        }
+        @page :left {}
+        @page :right {}
+    </style>
+</head>
+<body>
+    <h1>Print multiple document</h1>
+    <main id="main" role="main">
+
+    </main>
+
+
+    <button type="button" id="button">Charger du contenu <strong>'same domain'</strong></button> 
+    <button type="button" id="button-cible">Charger du contenu ciblé <strong>'same domain'</strong></button><br>
+    <button type="button" id="button-external">Charger du contenu <strong>'other domain'</strong></button><br><br>
+    <button type="button" id="page-add-section">Ajouter un saut de page</button>
+    <button type="button" id="page-print">Imprimer la page</button>
+
+
+
+    <div id="toprint"></div>
+
+    <div id="recip1" style="background-color: #CCC;"></div>
+
+
+
+    <!-- print options -->
+    <fieldset id="printStyle">
+        <legend>How would you like to print</legend>
+        <label for="single"
+        ><input type="radio" id="single" name="type" value="single" checked />No
+        Pages</label
+        >
+        <label for="double"
+        ><input type="radio" id="paged" name="type" value="paged" />Chapters
+        Paged</label
+        >
+    </fieldset>
+
+    <!-- Content to be printed -->
+    <article id="print-area" data-print="single">
+    <section id="toc">
+        <h2>Table of contents</h2>
+        <ul>
+        <li>Foreword</li>
+        <li>Introduction</li>
+        <li>Chapter One - named pages</li>
+        <li>Chapter Two - page orientation</li>
+        <li>Chapter Three - page margins</li>
+        <li>Conclusion</li>
+        </ul>
+    </section>
+
+    <section id="foreword">
+      <h2>Foreword</h2>
+      <p>
+        This book is all about how the CSS <code>@page</code> at-rule can help
+        with printing HTML books.
+      </p>
+    </section>
+    <section id="introduction">
+      <h2>Introduction</h2>
+      <p>
+        This book is a concept to show how an <em>HTML</em> document can easily be
+        printed out in pages.
+      </p>
+    </section>
+    <section id="chapter1" class="chapter">
+      <h2>Named pages</h2>
+      <p>Lorem ipsum</p>
+    </section>
+    <section id="chapter2" class="chapter">
+      <h2>Page Orientation</h2>
+      <p>Lorem ipsum</p>
+    </section>
+    <section id="chapter3" class="chapter">
+      <h2>Page Margins</h2>
+      <p>There are 16 page margins that can be set:</p>
+      <ul>
+        <li>@top-left-corner</li>
+        <li>@top-left</li>
+        <li>@top-middle</li>
+        <li>@top-right</li>
+        <li>@top-right-corner</li>
+        <li>@left-top</li>
+        <li>@left-middle</li>
+        <li>@left-bottom</li>
+        <li>@right-top</li>
+        <li>@right-middle</li>
+        <li>@right-bottom</li>
+        <li>@bottom-left-corner</li>
+        <li>@bottom-left</li>
+        <li>@bottom-middle</li>
+        <li>@bottom-right</li>
+        <li>@bottom-right-corner</li>
+      </ul>
+      <p>They can be used to show what appears in these parts of the margin</p>
+    </section>
+    <section id="conclusion">
+      <h2>Conclusion</h2>
+      <p>Now go ahead and write books.</p>
+    </section>
+  </article>
+  
+
+
+    <script type="text/javascript">
+        const printArea = document.querySelector("#print-area");
+        const printButton = document.querySelector("#page-print");
+        const printOption = document.querySelector("#printStyle");
+        printOption.addEventListener("change", (event) => {
+        if (event.target.value === "single") {
+            printArea.dataset.print = "single";
+        } else {
+            printArea.dataset.print = "paged";
+        }
+        });
+        // BOUTON PRINT 
+        printButton.addEventListener("click", () => { window.print(); });
+
+        // JQUERY FUNCTION
+        // Récupère le le contenu html avec les balise de l'élément ciblé
+        // var html = $("#recip1").oiuterHTML();
+        jQuery.fn.outerHTML = function() {
+            return jQuery('<div />').append(this.eq(0).clone()).html();
+        };
+
+
+        $( document ).ready(function() {
+
+            // ACTION
+            $("#button").click(function(){
+                $("#recip1").load("page1.html", function(responseTxt, statusTxt, jqXHR){
+                    if(statusTxt == "success"){
+                        console.log("Loading 'page 1' .... Ok");
+                    }
+                    if(statusTxt == "error"){
+                        alert("Error: " + jqXHR.status + " " + jqXHR.statusText);
+                    }
+                });
+            });
+
+
+            $("#button-cible").click(function(){
+                $("#recip1").load("page1.html .para1", function(responseTxt, statusTxt, jqXHR){
+                    if(statusTxt == "success"){
+                        console.log("Loading 'page 1 ciblé' .... Ok");
+
+                        var html = $("#recip1").html();
+                        $('#toprint').append(html);
+                        $("#recip1").html('');
+                    }
+                    if(statusTxt == "error"){
+                        alert("Error: " + jqXHR.status + " " + jqXHR.statusText);
+                    }
+                });
+            });
+
+
+            $("#button-external").click(function(){
+
+                var contentURI= 'https://coeurdespyrenees.com/fiche/agenda/escape-gamela-grotte-du-dragon-/FMAMIP065V52G5P5/ .et_pb_section.fiche-objet';    // URL TO GRAB + # of any desired element // if needed :)
+                $('#recip1').load('grabber.php?url='+ contentURI, function(responseTxt, statusTxt, jqXHR){
+                    if(statusTxt == "success"){
+                        console.log("Loading 'page external' .... Ok");
+                    }
+                    if(statusTxt == "error"){
+                        alert("Error: " + jqXHR.status + " " + jqXHR.statusText);
+                    }
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>
